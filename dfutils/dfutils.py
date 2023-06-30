@@ -56,7 +56,7 @@ def zsplit_by_nv(df, drop_under=300):
 
 def split_by_nv(df, drop_under=300):
 
-    print("split_by_nv_new")
+    print("split_by_nv_new2")
     v0_days = []
     start_dt = None
     start_idx = None
