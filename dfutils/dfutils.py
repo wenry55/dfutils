@@ -2,7 +2,7 @@ import numpy as np
 from datetime import datetime
 
 # split df by no volume value (volume == 0)
-def split_by_nv(df):
+def split_by_nv(df, drop_under=300):
     
     dfv0 = df[df['volume'] == 0]
     v0days = []
@@ -47,5 +47,9 @@ def split_by_nv(df):
             to_idx = np.inf
     nv0_ranges.append([from_idx, to_idx])
 
+    result = []
     for vrange in nv0_ranges:
-        print(vrange)
+        if abs(vrange[0] - vrange[1]) > drop_under:
+            result.append(vrange)
+
+    return result
