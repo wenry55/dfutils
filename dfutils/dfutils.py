@@ -2,7 +2,7 @@ import numpy as np
 from datetime import datetime
 
 # split df by no volume value (volume == 0)
-def zsplit_by_nv(df, drop_under=300):
+def split_by_nv(df, drop_under=300):
     
     dfv0 = df[df['volume'] == 0]
     v0days = []
@@ -55,35 +55,6 @@ def zsplit_by_nv(df, drop_under=300):
     result = [vrange for vrange in result if len(df[(df.index > vrange[0]) & (df.index < vrange[1])]) > drop_under]
     return result
 
-def split_by_nv(df, drop_under=300):
-
-    print("split_by_nv_new4")
-    v0_days = []
-    start_dt = None
-    start_idx = None
-    prev_d = datetime(1900, 12, 1)
-    
-    for index, row in df[df['volume'] == 0].iterrows():
-        d = datetime.strptime(row['date'], '%Y%m%d')
-        if start_dt is None:
-            start_dt = d
-            start_idx = index
-        elif (d - prev_d).days > 10:
-            v0_days.append([start_dt, prev_d, start_idx, index - 1])
-            start_dt = d
-            start_idx = index
-        prev_d = d
-    
-    if start_dt is not None:
-        v0_days.append([start_dt, prev_d, start_idx, f.index[-1]])
-    
-    nv0_ranges = [[-np.inf, v0_days[0][2]]]
-    for i in range(len(v0_days) - 1):
-        nv0_ranges.append([v0_days[i][3], v0_days[i + 1][2]])
-    nv0_ranges.append([v0_days[-1][3], np.inf])
-    
-    result = [vrange for vrange in nv0_ranges if abs(vrange[0] - vrange[1]) > drop_under]
-    return result
 
 def test():
     print('test')
