@@ -82,7 +82,7 @@ def split_by_nv(df, drop_under=300):
     nv0_ranges.append([v0_days[-1][3], np.inf])
     
     result = [vrange for vrange in nv0_ranges if abs(vrange[0] - vrange[1]) > drop_under]
-    
+    result = [vrange for vrange in result if len(df[(df.index > vrange[0]) & (df.index < vrange[1])]) > drop_under]
     return result
 
 def test():
