@@ -52,6 +52,7 @@ def zsplit_by_nv(df, drop_under=300):
         if abs(vrange[0] - vrange[1]) > drop_under:
             result.append(vrange)
 
+    result = [vrange for vrange in result if len(df[(df.index > vrange[0]) & (df.index < vrange[1])]) > drop_under]
     return result
 
 def split_by_nv(df, drop_under=300):
@@ -74,7 +75,7 @@ def split_by_nv(df, drop_under=300):
         prev_d = d
     
     if start_dt is not None:
-        v0_days.append([start_dt, prev_d, start_idx, df.index[-1]])
+        v0_days.append([start_dt, prev_d, start_idx, f.index[-1]])
     
     nv0_ranges = [[-np.inf, v0_days[0][2]]]
     for i in range(len(v0_days) - 1):
@@ -82,7 +83,6 @@ def split_by_nv(df, drop_under=300):
     nv0_ranges.append([v0_days[-1][3], np.inf])
     
     result = [vrange for vrange in nv0_ranges if abs(vrange[0] - vrange[1]) > drop_under]
-    #result = [vrange for vrange in result if len(df[(df.index > vrange[0]) & (df.index < vrange[1])]) > drop_under]
     return result
 
 def test():
